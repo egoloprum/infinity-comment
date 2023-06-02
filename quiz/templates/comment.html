@@ -1,0 +1,21 @@
+{% for child_comment in dict.children %}
+
+  <div class="child-container">
+    <ul>
+      <li>id == {{ child_comment.id }} body == {{child_comment.body}} </li>
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden" name="parent-comment" value="{{ child_comment.id }}">
+        <input type="text" name="reply-comment" placeholder="reply..." style="height: 30px; width: 200px;" >
+        <!--<button>Press</button>-->
+      </form><br>
+    </ul>
+  </div>
+
+  <ul>
+    {% with dict=child_comment template="comment.html" %}
+      {% include template %}
+    {% endwith %}
+  </ul>
+
+{% endfor %}

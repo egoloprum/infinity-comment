@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Infinity comment</title>
+  </head>
+  <body>
+
+    {% block content %}
+
+      <div class="container">
+        <p style="font-size: 20px;">Lorem Ipsum is simply dummy text of the printing and typesetting industry.<br>
+           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown <br>
+           printer took a galley of type and scrambled it to make a type specimen book. It has survived not <br>
+           only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. <br>
+           It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,<br>
+           and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+
+        <form method="POST" action="">
+          {% csrf_token %}
+          <input type="text" name="comment" placeholder="new comment..." style="height: 30px; width: 200px;">
+        </form><br>
+
+        {% if comments.exists %}
+
+          {% for comment in comments %}
+            <ul>
+              {% if comment.is_parent %}
+
+                <li>id == {{ comment.id }} body == {{comment.body}} </li>
+                <form method="POST" action="">
+                  {% csrf_token %}
+                  <input type="hidden" name="parent-comment" value="{{ comment.id }}">
+                  <input type="text" name="reply-comment" placeholder="reply..." style="height: 30px; width: 200px;" >
+                  <!--<button>Press</button>-->
+                </form><br>
+
+                <div class="">
+                  {% with dict=comment template="comment.html" %}
+                    {% include template %}
+                  {% endwith %}
+                </div>
+
+              {% endif %}
+            </ul>
+          {% endfor %}
+
+        {% endif %}
+
+      </div>
+
+    {% endblock %}
+
+    
+  </body>
+</html>
